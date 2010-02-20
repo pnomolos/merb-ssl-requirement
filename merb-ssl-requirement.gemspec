@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name = %q{merb-ssl-requirement}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Steve Tooke"]
+  s.authors = ["Steve Tooke m7d"]
   s.date = %q{2008-10-27}
   s.description = %q{Merb plugin that provides ssl_requirement from rails}
   s.email = %q{steve.tooke@gmail.com}
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{merb}
   s.rubygems_version = %q{1.2.0}
-  s.summary = %q{Merb plugin that provides ssl_requirement from rails}
+  s.summary = %q{Merb plugin that provides ssl_requirement from rails but ensures http protocol when in test or development mode to make it easier to develop and test}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

@@ -24,3 +24,4 @@ class Secure < Merb::Controller
     #   flash[:foo] = "bar"
     # end
 end
+

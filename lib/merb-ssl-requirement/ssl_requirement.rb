@@ -1,5 +1,6 @@
 # Copyright (c) 2005 David Heinemeier Hansson
 # Copyright (c) 2008 Steve Tooke
+# Copyright (c) 2010 Lang Riley
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -28,12 +29,10 @@ module SslRequirement
   module ClassMethods
     # Specifies that the named actions requires an SSL connection to be performed (which is enforced by ensure_proper_protocol).
     def ssl_required(*actions)
-      # write_inheritable_array(:ssl_required_actions, actions)
       self.ssl_required_actions.push(*actions)
     end
 
     def ssl_allowed(*actions)
-      # write_inheritable_array(:ssl_allowed_actions, actions)
       self.ssl_allowed_actions.push(*actions)
     end
     
@@ -47,25 +46,43 @@ module SslRequirement
   end
   
   protected
-    # Returns true if the current action is supposed to run as SSL
+    # Returns true if the current action is supposed to run as SSL and
+    # the application configuration (see README) has not specified the
+    # current environment to be exempt from ssl-requirement
+    # enforcement
     def ssl_required?
-      # (self.class.read_inheritable_attribute(:ssl_required_actions) || []).include?(action_name.to_sym)
-      self.class.ssl_required_actions.include?(action_name.to_sym)
+
+      if exclude_ssl_requirement?
+        false
+      else
+        self.class.ssl_required_actions.include?(action_name.to_sym)
+      end
+      
     end
     
     def ssl_allowed?
       self.class.ssl_allowed_actions.include?(action_name.to_sym)
-      # (self.class.read_inheritable_attribute(:ssl_allowed_actions) || []).include?(action_name.to_sym)
     end
 
   private
     def ensure_proper_protocol
       return true if ssl_allowed?
-      
+
       if ssl_required? && !request.ssl?
         throw :halt, redirect("https://" + request.host + request.uri)
       elsif request.ssl? && !ssl_required?
         throw :halt, redirect("http://" + request.host + request.uri)
       end
     end
+
+    def exclude_ssl_requirement?
+
+      if Merb::Config.key?(:ssl_requirement_excluded_environments) and Merb::Config[:ssl_requirement_excluded_environments]
+        Merb::Config[:ssl_requirement_excluded_environments].include?(Merb.env)
+      else
+        false
+      end
+
+    end
+    
 end

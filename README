@@ -40,5 +40,18 @@ inclusion, it'll add the before filter that validates the declarations. Some
 times you'll want to run other before filters before that. They should then be
 declared ahead of including this module.
 
+Update Sat Feb 20, 2010: Added the ability to set a configuration parameter where you can specify which environments you want to exclude merb-ssl-requirement from enforcing ssl. This might be useful for testing and development environments where you don't have ssl certs in place. If you don't provide the configuration parameter or its value, merb-ssl-requirement still continues to function as expected. 
+
+Example:
+
+If you want to work in the development environment and you don't want ssl enforced then you can do the following in your-merb-app-base-dir/config/init.rb:
+
+Merb::Config.use do |c|
+  c[:ssl_requirement_excluded_environments] = ["development"]
+end
+
+Other environments, will continue to enforce ssl without being effected.
+
 Copyright (c) 2005 David Heinemeier Hansson, released under the MIT license
 Copyright (c) 2008 Steve Tooke
+Copyright (c) 2010 Lang Riley
