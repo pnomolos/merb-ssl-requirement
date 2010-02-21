@@ -50,6 +50,12 @@ Merb::Config.use do |c|
   c[:ssl_requirement_excluded_environments] = ["development"]
 end
 
+If you want to exclude both development and test environments then specify both:
+
+Merb::Config.use do |c|
+  c[:ssl_requirement_excluded_environments] = ["test", "development"]
+end
+
 Other environments, will continue to enforce ssl without being effected.
 
 Copyright (c) 2005 David Heinemeier Hansson, released under the MIT license
